@@ -5,27 +5,34 @@ namespace Tracer
 {
 	internal class MethodInfo
 	{
-		internal string name;
-		internal string className;
-		internal long time;
-
+		internal string Name { get; }
+		internal string ClassName { get; }
+		internal long Time { get { return timer.ElapsedMilliseconds; } }
+		internal bool IsTracing { get { return isTracing; } }
 		private Stopwatch timer;
+		private bool isTracing;
 
 		internal MethodInfo(MethodBase method)
 		{
 			timer = new Stopwatch();
-			name = method.Name;
-			className = method.DeclaringType.ToString();
+			isTracing = true;
+			Name = method.Name;
+			ClassName = method.DeclaringType.ToString();
 		}
 
-		internal Stopwatch GetTimer()
+		internal void EndTrace()
 		{
-			return timer;
+			isTracing = false;
 		}
 
-		internal void WriteResult()
+		internal void Start()
 		{
-			time = timer.ElapsedMilliseconds;
+			timer.Start();
+		}
+
+		internal void Stop()
+		{
+			timer.Stop();
 		}
 	}
 }
