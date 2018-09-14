@@ -9,16 +9,16 @@ namespace Tracer
 {
 	public class TraceResult
 	{
-		public ConcurrentDictionary<int, object> dictionary;
+		internal ConcurrentDictionary<int, ThreadTracer> dictionary;
 
 		internal TraceResult()
 		{
-			dictionary = new ConcurrentDictionary<int, object>();
+			dictionary = new ConcurrentDictionary<int, ThreadTracer>();
 		}
 
 		internal void Start(int id,object method)
 		{
-
+			ThreadTracer threadTracer = dictionary.GetOrAdd(id, new ThreadTracer());
 		}
 	}
 }
