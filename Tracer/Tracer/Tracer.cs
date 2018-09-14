@@ -1,10 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tracer
 {
@@ -14,10 +11,12 @@ namespace Tracer
 		private StackTrace stackTrace;
 		private StackFrame stackFrame;
 		private TraceResult trResult;
+		private ConcurrentDictionary<MethodInfo, Stopwatch> timerDictionary;
 
 		public Tracer()
 		{
-			trResult = new TraceResult();
+			timerDictionary = new ConcurrentDictionary<MethodInfo, Stopwatch>();
+			trResult = new TraceResult(timerDictionary);
 		}
 
 		public void StartTrace()

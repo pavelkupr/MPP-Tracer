@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Concurrent;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace Tracer
 {
@@ -11,14 +8,18 @@ namespace Tracer
 	{
 		internal ConcurrentDictionary<int, ThreadTracer> dictionary;
 
-		internal TraceResult()
+		private ConcurrentDictionary<MethodInfo, Stopwatch> timerDictionary;
+
+		internal TraceResult(ConcurrentDictionary<MethodInfo, Stopwatch> tDictionary)
 		{
 			dictionary = new ConcurrentDictionary<int, ThreadTracer>();
+			timerDictionary = tDictionary;
 		}
 
-		internal void Start(int id,object method)
+		internal void Start(int id,MethodBase method)
 		{
-			ThreadTracer threadTracer = dictionary.GetOrAdd(id, new ThreadTracer());
+			ThreadTracer threadTracer = dictionary.GetOrAdd(id, new ThreadTracer(timerDictionary));
+			threadTracer.AddMethod(method);
 		}
 	}
 }
