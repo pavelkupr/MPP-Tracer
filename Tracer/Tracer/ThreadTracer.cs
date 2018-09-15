@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace Tracer
+namespace Trace
 {
 	internal class ThreadTracer
 	{
-		internal List<MethodInfo> methodList;
-		private Stack<MethodInfo> methodStack;
+		private readonly List<MethodInfo> methodList;
+		private readonly Stack<MethodInfo> methodStack;
+		internal IEnumerable<MethodInfo> MethodList { get { return methodList; } }
 
 		internal ThreadTracer()
 		{
@@ -18,13 +19,15 @@ namespace Tracer
 		{
 			MethodInfo currMethodInfo = new MethodInfo(method);
 			methodList.Add(currMethodInfo);
+			if (methodStack.Count != 0)
+				methodStack.Peek().AddChild(currMethodInfo);
 			methodStack.Push(currMethodInfo);
 		}
 
 		internal void Stop()
 		{
 			MethodInfo currMethodInfo = methodStack.Pop();
-			currMethodInfo.Stop();
+			currMethodInfo.EndTrace();
 		}
 	}
 }

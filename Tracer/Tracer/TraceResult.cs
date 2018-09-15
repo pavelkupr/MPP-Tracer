@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Reflection;
 
-namespace Tracer
+namespace Trace
 {
 	public class TraceResult
 	{
-		internal ConcurrentDictionary<int, ThreadTracer> dictionary;
+		private readonly ConcurrentDictionary<int, ThreadTracer> dictionary;
+		internal IEnumerable<KeyValuePair<int, ThreadTracer>> Dictionary { get { return dictionary; } }
 
-		internal TraceResult()
+		internal TraceResult(ConcurrentDictionary<int, ThreadTracer> curr_dictionary)
 		{
-			dictionary = new ConcurrentDictionary<int, ThreadTracer>();
+			dictionary = curr_dictionary;
 		}
 
 		internal void Start(int id,MethodBase method)

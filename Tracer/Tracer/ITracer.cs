@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tracer
+namespace Trace
 {
 	interface ITracer
 	{
 		void StartTrace();
 
-		void Stoptrace();
+		void StopTrace();
 
 		TraceResult GetTraceResult();
-
 	}
 }

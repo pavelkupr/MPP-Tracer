@@ -1,19 +1,21 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
 
-namespace Tracer
+namespace Trace
 {
 	public class Tracer : ITracer
 	{
-
+		private readonly ConcurrentDictionary<int, ThreadTracer> dictionary;
 		private StackTrace stackTrace;
 		private StackFrame stackFrame;
 		private TraceResult trResult;
 
 		public Tracer()
 		{
-			trResult = new TraceResult();
+			dictionary = new ConcurrentDictionary<int, ThreadTracer>();
+			trResult = new TraceResult(dictionary);
 		}
 
 		public void StartTrace()
@@ -25,7 +27,7 @@ namespace Tracer
 			StartThreadTimers();
 		}
 
-		public void Stoptrace()
+		public void StopTrace()
 		{
 			trResult.Stop(Thread.CurrentThread.ManagedThreadId);
 		}
@@ -38,12 +40,12 @@ namespace Tracer
 		private void StartThreadTimers()
 		{
 			int id = Thread.CurrentThread.ManagedThreadId;
-			if (trResult.dictionary.ContainsKey(id))
+			if (dictionary.ContainsKey(id))
 			{
-				if (!trResult.dictionary.TryGetValue(id, out ThreadTracer threadTracer))
+				if (!dictionary.TryGetValue(id, out ThreadTracer threadTracer))
 					throw new Exception("Can't get value");
 
-				foreach (MethodInfo methodInfo in threadTracer.methodList)
+				foreach (MethodInfo methodInfo in threadTracer.MethodList)
 					if(methodInfo.IsTracing)
 						methodInfo.Start();
 			}
@@ -52,12 +54,12 @@ namespace Tracer
 		private void StopThreadTimers()
 		{
 			int id = Thread.CurrentThread.ManagedThreadId;
-			if (trResult.dictionary.ContainsKey(id))
+			if (dictionary.ContainsKey(id))
 			{
-				if (!trResult.dictionary.TryGetValue(id, out ThreadTracer threadTracer))
+				if (!dictionary.TryGetValue(id, out ThreadTracer threadTracer))
 					throw new Exception("Can't get value");
 
-				foreach (MethodInfo methodInfo in threadTracer.methodList)
+				foreach (MethodInfo methodInfo in threadTracer.MethodList)
 					if (methodInfo.IsTracing)
 						methodInfo.Stop();
 			}
