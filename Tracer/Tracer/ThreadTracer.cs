@@ -8,6 +8,16 @@ namespace Trace
 		private readonly List<MethodInfo> methodList;
 		private readonly Stack<MethodInfo> methodStack;
 		internal IEnumerable<MethodInfo> MethodList { get { return methodList; } }
+		internal long ThreadTime
+		{
+			get
+			{
+				long result = 0;
+				foreach (MethodInfo mInfo in MethodList)
+					result += mInfo.Time;
+				return result;
+			}
+		}
 
 		internal ThreadTracer()
 		{
@@ -28,6 +38,8 @@ namespace Trace
 		{
 			MethodInfo currMethodInfo = methodStack.Pop();
 			currMethodInfo.EndTrace();
+			if (methodStack.Count != 0)
+				methodList.Remove(currMethodInfo);
 		}
 	}
 }
