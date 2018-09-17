@@ -14,8 +14,10 @@ namespace Test
 			Test(tracer);
 			Test2(tracer);
 			ResultWriter resultWriter = new ResultWriter();
+			XmlSerializer xmlSerializer = new XmlSerializer();
 			resultWriter.ConsolePrint(tracer.GetTraceResult());
 			resultWriter.FilePrint(tracer.GetTraceResult(), "test");
+			xmlSerializer.ResultInFile(tracer.GetTraceResult(),"result");
 			Console.ReadLine();
 		}
 

@@ -27,10 +27,7 @@ namespace Trace
 				WriteLineInStream("Time: "+thread.Value.ThreadTime.ToString(), stream);
 				foreach(MethodInfo method in thread.Value.MethodList)
 				{
-					WriteLineInStream("   Class name: " + method.ClassName.ToString(), stream);
-					WriteLineInStream("   Name: " + method.Name.ToString(), stream);
-					WriteLineInStream("   Time: " + method.Time.ToString(), stream);
-					ChildrenResult(method, stream, 2);
+					ChildrenResult(method, stream, 1);
 				}
 			}
 		}
@@ -38,15 +35,14 @@ namespace Trace
 		private void ChildrenResult(MethodInfo method, Stream stream,int inCount)
 		{
 			string shift = "";
-			inCount++;
-			for (int i = 1; i < inCount; i++)
+			for (int i = 0; i < inCount; i++)
 				shift += "   ";
+			WriteLineInStream(shift + "Class name: " + method.ClassName.ToString(), stream);
+			WriteLineInStream(shift + "Name: " + method.Name.ToString(), stream);
+			WriteLineInStream(shift + "Time: " + method.Time.ToString(), stream);
 			foreach (MethodInfo child in method.Children)
 			{
-				WriteLineInStream(shift + "Class name: " + child.ClassName.ToString(), stream);
-				WriteLineInStream(shift + "Name: " + child.Name.ToString(), stream);
-				WriteLineInStream(shift + "Time: " + child.Time.ToString(), stream);
-				ChildrenResult(child, stream, inCount);
+				ChildrenResult(child, stream, ++inCount);
 			}
 		}
 
