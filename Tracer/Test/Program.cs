@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using Trace;
-using System.Runtime.Serialization.Json;
 using System.IO;
 
 namespace Test
@@ -15,9 +14,12 @@ namespace Test
 			Test2(tracer);
 			ResultWriter resultWriter = new ResultWriter();
 			XmlSerializer xmlSerializer = new XmlSerializer();
+			JsonSerializer jsonSerializer = new JsonSerializer();
 			resultWriter.ConsolePrint(tracer.GetTraceResult());
 			resultWriter.FilePrint(tracer.GetTraceResult(), "test");
 			xmlSerializer.ResultInFile(tracer.GetTraceResult(),"result");
+			jsonSerializer.ResultInFile(tracer.GetTraceResult(), "result");
+			jsonSerializer.ResultInStream(tracer.GetTraceResult(), Console.OpenStandardOutput());
 			Console.ReadLine();
 		}
 
