@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Trace;
+using System.Diagnostics;
 using System.IO;
 
 namespace Test
@@ -20,6 +21,13 @@ namespace Test
 			xmlSerializer.ResultInFile(tracer.GetTraceResult(),"result");
 			jsonSerializer.ResultInFile(tracer.GetTraceResult(), "result");
 			jsonSerializer.ResultInStream(tracer.GetTraceResult(), Console.OpenStandardOutput());
+			Console.ReadLine();
+			Stopwatch watcher = new Stopwatch();
+			watcher.Start();
+			tracer.StartTrace();
+			//Thread.Sleep(100);
+			watcher.Stop();
+			Console.WriteLine(watcher.Elapsed.TotalMilliseconds);
 			Console.ReadLine();
 		}
 
