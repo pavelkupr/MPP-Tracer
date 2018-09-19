@@ -10,7 +10,7 @@ namespace TraceTests
 	public class TracerTests
 	{
 		private static Stopwatch watcher;
-		private static Tracer tracer;
+		private static ITracer tracer;
 
 		[ClassInitialize]
 		public static void ClassInitilize(TestContext context)
@@ -29,7 +29,7 @@ namespace TraceTests
 		public void StartTrace_In_Less_3_ms()
 		{
 			const double expectedMax = 3;
-
+			
 			watcher.Start();
 			tracer.StartTrace();
 			watcher.Stop();
