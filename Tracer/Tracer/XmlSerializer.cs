@@ -24,7 +24,7 @@ namespace Trace
 			foreach (KeyValuePair<int, ThreadTracer> thread in traceResult.Dictionary)
 			{
 				XElement threadXML = new XElement("thread");
-				threadXML.Add(new XAttribute("num", thread.Key));
+				threadXML.Add(new XAttribute("id", thread.Key));
 				threadXML.Add(new XAttribute("time", thread.Value.ThreadTime));
 				foreach (MethodInfo method in thread.Value.MethodList)
 				{

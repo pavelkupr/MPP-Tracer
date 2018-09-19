@@ -2,7 +2,7 @@
 
 namespace Trace
 {
-	interface ISerializer
+	public interface ISerializer
 	{
 		void ResultInFile(TraceResult traceResult, string fileName);
 

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracer", "Tracer\Tracer.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{F2E7ABDD-F137-4770-81A7-D0D5869B871C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "TracerTests\Tests.csproj", "{8BC61AB8-909C-4162-BF30-F0CA628915F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TracerUnitTests", "TracerTests\TracerUnitTests.csproj", "{8BC61AB8-909C-4162-BF30-F0CA628915F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,55 +1,68 @@
 ﻿using System;
 using System.Threading;
+using System.Collections.Generic;
 using Trace;
-using System.Diagnostics;
-using System.IO;
 
 namespace Test
 {
 	class Program
 	{
+		private static ITracer tracer = new Tracer();
+
 		static void Main(string[] args)
 		{
-			Tracer tracer = new Tracer();
-			Test(tracer);
-			Test2(tracer);
-			ResultWriter resultWriter = new ResultWriter();
-			XmlSerializer xmlSerializer = new XmlSerializer();
-			JsonSerializer jsonSerializer = new JsonSerializer();
-			resultWriter.ConsolePrint(tracer.GetTraceResult());
-			resultWriter.FilePrint(tracer.GetTraceResult(), "test");
-			xmlSerializer.ResultInFile(tracer.GetTraceResult(),"result");
-			jsonSerializer.ResultInFile(tracer.GetTraceResult(), "result");
-			jsonSerializer.ResultInStream(tracer.GetTraceResult(), Console.OpenStandardOutput());
-			Console.ReadLine();
-			Stopwatch watcher = new Stopwatch();
-			watcher.Start();
-			tracer.StartTrace();
-			//Thread.Sleep(100);
-			watcher.Stop();
-			Console.WriteLine(watcher.Elapsed.TotalMilliseconds);
+			//tracer.StartTrace();
+			List<Thread> threads = new List<Thread>();
+			TestClass1 testClass1 = new TestClass1(tracer);
+			testClass1.Test3();
+			testClass1.Test2();
+			testClass1.Test1();
+			for (int i = 0; i < 3; i++)
+			{
+				Thread thread = null;
+				switch (i)
+				{
+					case 0:
+						thread = new Thread(testClass1.Test1);
+						break;
+
+					case 1:
+						thread = new Thread(testClass1.Test2);
+						break;
+
+					case 2:
+						thread = new Thread(testClass1.Test3);
+						break;
+				}
+				threads.Add(thread);
+
+				thread.Start();
+			}
+			
+			foreach (Thread thread in threads)
+			{
+				thread.Join();
+			}
+
+			//tracer.StopTrace();
+
+			WriteResult();
 			Console.ReadLine();
 		}
 
-		static void Test(Tracer tracer)
+		static void WriteResult()
 		{
-			tracer.StartTrace();
-			Test2(tracer);
-			Thread.Sleep(20);
-			tracer.StopTrace();
+			ResultWriter resultWriter = new ResultWriter();
+			XmlSerializer xmlSerializer = new XmlSerializer();
+			JsonSerializer jsonSerializer = new JsonSerializer();
+			TxtWriter txtWriter = new TxtWriter();
+			TraceResult result = tracer.GetTraceResult();
+
+			resultWriter.ResultInConsole(txtWriter, result);
+			resultWriter.ResultInFile(txtWriter, result, "result");
+			resultWriter.ResultInFile(jsonSerializer, result, "result");
+			resultWriter.ResultInFile(xmlSerializer, result, "result");
 		}
-		static void Test2(Tracer tracer)
-		{
-			tracer.StartTrace();
-			Test3(tracer);
-			Thread.Sleep(20);
-			tracer.StopTrace();
-		}
-		static void Test3(Tracer tracer)
-		{
-			tracer.StartTrace();
-			Thread.Sleep(40);
-			tracer.StopTrace();
-		}
+
 	}
 }

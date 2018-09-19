@@ -2,6 +2,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Trace;
 using System.Diagnostics;
+using System.Threading;
+
 namespace TraceTests
 {
 	[TestClass]
@@ -26,14 +28,14 @@ namespace TraceTests
 		[TestMethod]
 		public void StartTrace_In_Less_3_ms()
 		{
-			const double expectedMax = 3; 
+			const double expectedMax = 3;
 
 			watcher.Start();
 			tracer.StartTrace();
 			watcher.Stop();
 			Debug.WriteLine("Time: " + watcher.Elapsed.TotalMilliseconds);
 
-			if(watcher.Elapsed.TotalMilliseconds > expectedMax)
+			if (watcher.Elapsed.TotalMilliseconds > expectedMax)
 				Assert.Fail("The method runs in more 3 ms");
 		}
 
@@ -51,5 +53,6 @@ namespace TraceTests
 			if (watcher.Elapsed.TotalMilliseconds > expectedMax)
 				Assert.Fail("The method runs in more 1 ms");
 		}
+
 	}
 }
